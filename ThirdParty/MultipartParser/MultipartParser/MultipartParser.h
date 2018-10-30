@@ -212,11 +212,19 @@ private:
 			if (index - 1 >= lookbehind.size()) {
 				setError("Parser bug: index overflows lookbehind buffer. "
 					"Please send bug report with input file attached.");
+#ifndef NUTTX
 				throw std::out_of_range("index overflows lookbehind buffer");
+#else
+				return;
+#endif
 			} else if (index < 1) {
 				setError("Parser bug: index underflows lookbehind buffer. "
 					"Please send bug report with input file attached.");
+#ifndef NUTTX
 				throw std::out_of_range("index underflows lookbehind buffer");
+#else
+				return;
+#endif
 			}
 			lookbehind[index - 1] = c;
 		} else if (prevIndex > 0) {
