@@ -15,6 +15,10 @@
 
 #include <AVSCommon/Utils/MacAddressString.h>
 
+#ifdef NUTTX
+#include <cctype>
+#endif
+
 #include <memory>
 #include <string>
 

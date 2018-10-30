@@ -51,7 +51,7 @@ private:
 };
 
 const std::string ThreadMoniker::getThisThreadMoniker() {
-#ifdef _WIN32
+#if defined(_WIN32) || defined(NUTTX)
     std::ostringstream winThreadID;
     winThreadID << std::setw(3) << std::hex << std::right << std::this_thread::get_id();
     return winThreadID.str();
