@@ -37,7 +37,7 @@ public:
     using SDSBufferType = avsCommon::utils::sds::InProcessSDSTraits::Buffer;
 
     /// Default size of underlying SDS when created internally.
-    static const int SDS_BUFFER_DEFAULT_SIZE_IN_BYTES = 0x100000;
+    static const int SDS_BUFFER_DEFAULT_SIZE_IN_BYTES = (16 * 1024);
 
     /**
      * Constructor.
