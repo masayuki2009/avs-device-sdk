@@ -16,7 +16,12 @@
 #ifndef ALEXA_CLIENT_SDK_CAPABILITYAGENTS_AIP_INCLUDE_AIP_ESPDATA_H_
 #define ALEXA_CLIENT_SDK_CAPABILITYAGENTS_AIP_INCLUDE_AIP_ESPDATA_H_
 
+#ifdef NUTTX
+#include <cctype>
+#else
 #include <ctype.h>
+#endif
+
 #include <string>
 
 namespace alexaClientSDK {
