@@ -42,7 +42,11 @@
 #include <CBLAuthDelegate/CBLAuthDelegate.h>
 #include <CBLAuthDelegate/SQLiteCBLAuthDelegateStorage.h>
 #include <CapabilitiesDelegate/CapabilitiesDelegate.h>
+#ifdef NUTTX
+#include <NxMediaPlayer/MediaPlayer.h>
+#else
 #include <MediaPlayer/MediaPlayer.h>
+#endif
 #include <Notifications/SQLiteNotificationsStorage.h>
 #include <Settings/SQLiteSettingStorage.h>
 #include <SQLiteStorage/SQLiteMiscStorage.h>
@@ -65,10 +69,10 @@ static const unsigned int NUM_CHANNELS = 1;
 static const size_t WORD_SIZE = 2;
 
 /// The maximum number of readers of the stream.
-static const size_t MAX_READERS = 10;
+static const size_t MAX_READERS = 2;
 
 /// The amount of audio data to keep in the ring buffer.
-static const std::chrono::seconds AMOUNT_OF_AUDIO_DATA_IN_BUFFER = std::chrono::seconds(15);
+static const std::chrono::seconds AMOUNT_OF_AUDIO_DATA_IN_BUFFER = std::chrono::seconds(1);
 
 /// The size of the ring buffer.
 static const size_t BUFFER_SIZE_IN_SAMPLES = (SAMPLE_RATE_HZ)*AMOUNT_OF_AUDIO_DATA_IN_BUFFER.count();
@@ -598,12 +602,21 @@ bool SampleApplication::initialize(
         holdCanOverride,
         holdCanBeOverridden);
 
+#ifdef NUTTX
+    std::shared_ptr<alexaClientSDK::sampleApp::NxMicWrapper> micWrapper =
+        alexaClientSDK::sampleApp::NxMicWrapper::create(sharedDataStream);
+    if (!micWrapper) {
+        ACSDK_CRITICAL(LX("Failed to create NxMicWrapper!"));
+        return false;
+    }
+#else
     std::shared_ptr<alexaClientSDK::sampleApp::PortAudioMicrophoneWrapper> micWrapper =
         alexaClientSDK::sampleApp::PortAudioMicrophoneWrapper::create(sharedDataStream);
     if (!micWrapper) {
         ACSDK_CRITICAL(LX("Failed to create PortAudioMicrophoneWrapper!"));
         return false;
     }
+#endif
 // Creating wake word audio provider, if necessary
 #ifdef KWD
     bool wakeAlwaysReadable = true;

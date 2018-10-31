@@ -28,7 +28,11 @@
 #endif
 #include <CapabilitiesDelegate/CapabilitiesDelegate.h>
 #include <ExternalMediaPlayer/ExternalMediaPlayer.h>
+#ifdef NUTTX
+#include <NxMediaPlayer/MediaPlayer.h>
+#else
 #include <MediaPlayer/MediaPlayer.h>
+#endif
 
 namespace alexaClientSDK {
 namespace sampleApp {

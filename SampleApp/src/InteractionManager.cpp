@@ -22,7 +22,11 @@ namespace sampleApp {
 
 InteractionManager::InteractionManager(
     std::shared_ptr<defaultClient::DefaultClient> client,
+#ifdef NUTTX
+    std::shared_ptr<sampleApp::NxMicWrapper> micWrapper,
+#else
     std::shared_ptr<sampleApp::PortAudioMicrophoneWrapper> micWrapper,
+#endif
     std::shared_ptr<sampleApp::UIManager> userInterface,
     capabilityAgents::aip::AudioProvider holdToTalkAudioProvider,
     capabilityAgents::aip::AudioProvider tapToTalkAudioProvider,

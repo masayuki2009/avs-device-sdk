@@ -21,6 +21,10 @@
 #include "SampleApp/UserInputManager.h"
 #include "SampleApp/ConsolePrinter.h"
 
+#ifdef NUTTX
+int g_tap_count;
+#endif
+
 namespace alexaClientSDK {
 namespace sampleApp {
 
@@ -115,6 +119,9 @@ void UserInputManager::run() {
         } else if (x == HOLD) {
             m_interactionManager->holdToggled();
         } else if (x == TAP) {
+#ifdef NUTTX
+            g_tap_count++;
+#endif
             m_interactionManager->tap();
         } else if (x == PLAY) {
             m_interactionManager->playbackPlay();

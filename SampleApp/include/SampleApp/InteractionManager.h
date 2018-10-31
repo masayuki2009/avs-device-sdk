@@ -26,7 +26,11 @@
 #include <RegistrationManager/CustomerDataManager.h>
 
 #include "KeywordObserver.h"
+#ifdef NUTTX
+#include "NxMicWrapper.h"
+#else
 #include "PortAudioMicrophoneWrapper.h"
+#endif
 #include "UIManager.h"
 
 namespace alexaClientSDK {
@@ -45,7 +49,11 @@ public:
      */
     InteractionManager(
         std::shared_ptr<defaultClient::DefaultClient> client,
+#ifdef NUTTX
+        std::shared_ptr<sampleApp::NxMicWrapper> micWrapper,
+#else
         std::shared_ptr<sampleApp::PortAudioMicrophoneWrapper> micWrapper,
+#endif
         std::shared_ptr<sampleApp::UIManager> userInterface,
         capabilityAgents::aip::AudioProvider holdToTalkAudioProvider,
         capabilityAgents::aip::AudioProvider tapToTalkAudioProvider,
@@ -226,7 +234,11 @@ private:
     std::shared_ptr<defaultClient::DefaultClient> m_client;
 
     /// The microphone managing object.
+#ifdef NUTTX
+    std::shared_ptr<sampleApp::NxMicWrapper> m_micWrapper;
+#else
     std::shared_ptr<sampleApp::PortAudioMicrophoneWrapper> m_micWrapper;
+#endif
 
     /// The user interface manager.
     std::shared_ptr<sampleApp::UIManager> m_userInterface;

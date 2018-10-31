@@ -15,8 +15,22 @@
 
 #include "SampleApp/SampleApplication.h"
 
+#include <iostream>
 #include <cstdlib>
 #include <string>
+
+#ifdef NUTTX
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+int sampleapp_main(void);
+
+#ifdef __cplusplus
+}
+#endif
+#endif
 
 /**
  * Function that evaluates if the SampleApp invocation uses old-style or new-style opt-arg style invocation.
@@ -43,8 +57,18 @@ bool usesOptStyleArgs(int argc, char* argv[]) {
  * @param argv An array of @argc elements, containing the program name and all command-line arguments.
  * @return @c EXIT_FAILURE if the program failed to initialize correctly, else @c EXIT_SUCCESS.
  */
+#ifdef NUTTX
+int sampleapp_main(void) {
+#else
 int main(int argc, char* argv[]) {
+#endif
     std::vector<std::string> configFiles;
+#ifdef NUTTX
+    std::string pathToKWDInputFolder = "none";
+    std::string logLevel = "DEBUG9";
+
+    configFiles.push_back("/mnt/sd1/amazon/AlexaClientSDKConfig.json");
+#else
     std::string pathToKWDInputFolder;
     std::string logLevel;
 
@@ -103,6 +127,8 @@ int main(int argc, char* argv[]) {
         configFiles.push_back(std::string(argv[1]));
         alexaClientSDK::sampleApp::ConsolePrinter::simplePrint("configFile " + std::string(argv[1]));
     }
+
+#endif
 
     auto sampleApplication =
         alexaClientSDK::sampleApp::SampleApplication::create(configFiles, pathToKWDInputFolder, logLevel);
